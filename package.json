@@ -1,8 +1,8 @@
 {
   "name": "botkit-fb-bootstrap",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Common structure and logic to help create FB Messenger bots faster with Botkit framework",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,16 +11,34 @@
     "url": "git+https://github.com/i2digital/botkit-fb-bootstrap.git"
   },
   "keywords": [
+    "nodejs",
     "botkit",
-    "fb",
-    "messenger",
     "chatbot",
-    "bootstrap"
+    "fb messenger"
   ],
   "author": "Pedro Rocha",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/i2digital/botkit-fb-bootstrap/issues"
   },
-  "homepage": "https://github.com/i2digital/botkit-fb-bootstrap#readme"
+  "homepage": "https://github.com/i2digital/botkit-fb-bootstrap#readme",
+  "devDependencies": {
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^4.0.0",
+    "gulp-load-plugins": "^1.5.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "botkit": "^0.6.5",
+    "botkit-storage-mongo": "^1.0.7",
+    "dashbot": "^9.4.0",
+    "debug": "^3.1.0",
+    "express": "^4.16.2",
+    "node-env-file": "^0.1.8",
+    "request": "^2.83.0"
+  }
 }
