@@ -1,11 +1,12 @@
+const bodyParser = require('body-parser');
+const Botkit = require('botkit');
+const dashbot = require('dashbot');
+const debug = require('debug')('botkit:webserver');
 const env = require('node-env-file');
 const express = require('express');
-const Botkit = require('botkit');
-const bodyParser = require('body-parser');
-const debug = require('debug')('botkit:webserver');
-const request = require('request');
-const path = require('path');
 const mongoStorage = require('botkit-storage-mongo');
+const path = require('path');
+const request = require('request');
 
 exports.init = (storageCollections, routes, skills, threadSettings) => {
   const projectRootFolder = path.join(__dirname, '..', '..', '..');
@@ -17,14 +18,12 @@ exports.init = (storageCollections, routes, skills, threadSettings) => {
     throw new Error('Error: Need MongoDB');
   }
 
-  const storage = mongoStorage({
-    mongoUri: process.env.MONGODB_URI,
-    tables: storageCollections,
-  });
-
   const controller = Botkit.facebookbot({
     debug: true,
-    storage: storage,
+    storage: mongoStorage({
+      mongoUri: process.env.MONGODB_URI,
+      tables: storageCollections,
+    }),
     access_token: process.env.FB_PAGE_TOKEN,
     verify_token: process.env.FB_VERIFY_TOKEN,
     bot_type: 'facebook',
@@ -36,12 +35,12 @@ exports.init = (storageCollections, routes, skills, threadSettings) => {
   this.dashbotInit(controller);
 
   controller.on(['message_received'], (bot, message) => {
-    skills.forEach((skill, key) => {
+    skills.forEach((skill) => {
       if (typeof skill.condition !== 'function') {
-        throw new Error(`'Error: There is a Skill not implementing condition() method'`);
+        throw new Error('Error: There is a Skill not implementing condition() method');
       }
       if (typeof skill.run !== 'function') {
-        throw new Error(`'Error: There is a Skill not implementing run() method'`);
+        throw new Error('Error: There is a Skill not implementing run() method');
       }
 
       const params = {
@@ -68,7 +67,7 @@ exports.init = (storageCollections, routes, skills, threadSettings) => {
 exports.server = (controller, routes) => {
   const webserver = express();
   webserver.use(bodyParser.json());
-  webserver.use(bodyParser.urlencoded({extended: true}));
+  webserver.use(bodyParser.urlencoded({ extended: true }));
 
   webserver.use(express.static('public'));
 
@@ -103,8 +102,15 @@ exports.subscribeEvents = (controller) => {
 
 exports.dashbotInit = (controller) => {
   if (process.env.DASHBOT_API_KEY) {
-    const dashbot = dashbot(process.env.DASHBOT_API_KEY).facebook;
-    controller.middleware.receive.use(dashbot.receive);
-    controller.middleware.send.use(dashbot.send);
+    try {
+      const dashbotInstance = dashbot(process.env.DASHBOT_API_KEY);
+
+      controller.middleware.receive.use(dashbotInstance.facebook.receive);
+      controller.middleware.send.use(dashbotInstance.facebook.send);
+    }
+    catch (e) {
+      debug.error('Dashbot API KEY was set, but module "dashbot" is not available');
+      process.exit(e.code);
+    }
   }
 };
