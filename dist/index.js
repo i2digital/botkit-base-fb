@@ -8,7 +8,7 @@ const path = require('path');
 const mongoStorage = require('botkit-storage-mongo');
 
 exports.init = (storageCollections, routes, skills, threadSettings) => {
-  const projectRootFolder = path.join(__dirname, '..', '..');
+  const projectRootFolder = path.join(__dirname, '..', '..', '..');
 
   if (!process.env.HEROKU_ENV) {
     env(`${projectRootFolder}/.env`);
