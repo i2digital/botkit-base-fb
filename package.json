@@ -1,0 +1,26 @@
+{
+  "name": "botkit-fb-bootstrap",
+  "version": "0.0.1",
+  "description": "Common structure and logic to help create FB Messenger bots faster with Botkit framework",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i2digital/botkit-fb-bootstrap.git"
+  },
+  "keywords": [
+    "botkit",
+    "fb",
+    "messenger",
+    "chatbot",
+    "bootstrap"
+  ],
+  "author": "Pedro Rocha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/i2digital/botkit-fb-bootstrap/issues"
+  },
+  "homepage": "https://github.com/i2digital/botkit-fb-bootstrap#readme"
+}
