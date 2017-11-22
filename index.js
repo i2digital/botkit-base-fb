@@ -34,7 +34,7 @@ exports.init = (storageCollections, routes, skills, threadSettings) => {
   this.subscribeEvents(controller);
   this.dashbotInit(controller);
 
-  controller.on(['message_received'], (bot, message) => {
+  function chooseSkill(bot, message) {
     skills.forEach((skill) => {
       if (typeof skill.condition !== 'function') {
         throw new Error('Error: There is a Skill not implementing condition() method');
@@ -42,19 +42,26 @@ exports.init = (storageCollections, routes, skills, threadSettings) => {
       if (typeof skill.run !== 'function') {
         throw new Error('Error: There is a Skill not implementing run() method');
       }
-
       const params = {
         controller,
         bot,
         message,
       };
-
+      
       const skillCondition = skill.condition(params);
 
       if (skillCondition === true) {
         skill.run(params);
       }
     });
+  }
+
+  controller.on(['facebook_referral'], (bot, message) => {
+    chooseSkill(bot, message);
+  });
+
+  controller.on(['message_received'], (bot, message) => {
+    chooseSkill(bot,message);
   });
 
   if (threadSettings) {
