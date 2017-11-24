@@ -1,6 +1,6 @@
 {
   "name": "botkit-fb-bootstrap",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Common structure and logic to help create FB Messenger bots faster with Botkit framework",
   "main": "index.js",
   "scripts": {
