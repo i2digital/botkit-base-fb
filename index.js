@@ -47,10 +47,20 @@ exports.init = (storageCollections, routes, skills, threadSettings) => {
         bot,
         message,
       };
-      
+
       const skillCondition = skill.condition(params);
 
-      if (skillCondition === true) {
+      if (
+        typeof skillCondition === 'object'
+        && skillCondition.constructor.name === 'Promise'
+      ) {
+        skillCondition.then((result) => {
+          if (result === true) {
+            skill.run(params);
+          }
+        });
+      }
+      else if (skillCondition === true) {
         skill.run(params);
       }
     });
@@ -61,7 +71,7 @@ exports.init = (storageCollections, routes, skills, threadSettings) => {
   });
 
   controller.on(['message_received'], (bot, message) => {
-    chooseSkill(bot,message);
+    chooseSkill(bot, message);
   });
 
   if (threadSettings) {
