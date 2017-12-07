@@ -5,7 +5,7 @@ const path = require('path');
 const debug = require('debug')('botkit:webserver');
 
 exports.init = (storageCollections, routes, skills, threadSettings) => {
-  const projectRootFolder = path.join(__dirname, '..', '..');
+  const projectRootFolder = path.join(__dirname, '..', '..', '..');
 
   if (!process.env.HOSTING_ENV) {
     env(`${projectRootFolder}/.env`);
